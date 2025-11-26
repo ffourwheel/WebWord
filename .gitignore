@@ -1,0 +1,40 @@
+# ------------------------------------
+# 1. NEXT.JS / NODE.JS (FRONTEND)
+# ------------------------------------
+/frontend/node_modules
+/frontend/.next
+/frontend/out
+/frontend/build
+/frontend/npm-debug.log
+/frontend/package-lock.json 
+/frontend/yarn.lock
+/frontend/pnpm-lock.yaml 
+/frontend/.env.local 
+/frontend/.vercel
+
+# ------------------------------------
+# 2. PYTHON / FASTAPI (BACKEND)
+# ------------------------------------
+/backend/__pycache__
+/backend/.venv
+/backend/venv
+/backend/*.pyc
+/backend/*.log
+/backend/.pytest_cache
+
+# ------------------------------------
+# 3. DOCKER / DATABASE VOLUMES / LOCAL FILES
+# ------------------------------------
+# PostgreSQL data volume (Docker handles this, but exclude if local)
+/postgres_data
+# Local SQLite file (if left over from previous tests)
+/backend/worddee.db 
+# Ignore .env files
+.env
+.env.local
+
+# ------------------------------------
+# 4. IDE and System Files
+# ------------------------------------
+.DS_Store
+.vscode/ # Visual Studio Code settings
