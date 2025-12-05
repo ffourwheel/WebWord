@@ -129,11 +129,10 @@ export default function WorddeePage() {
                     <div className="flex-1 py-1">
                         <div className="flex justify-between items-start">
                             <div className="flex items-center gap-2 mb-1">
-                                <button className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100"><Play size={10} fill="currentColor" /></button>
                                 <h2 className="text-4xl font-serif font-bold text-[#1f2937]">{wordData.word}</h2>
                             </div>
                             <span className="bg-[#fef3c7] text-[#92400e] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Level {wordData.level || 'General'}
-</span>
+                            </span>
                         </div>
                         
                         <p className="text-gray-400 font-sans text-sm font-medium mb-3 ml-8 tracking-wide">{wordData.pronunciation}</p>
