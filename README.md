@@ -82,7 +82,7 @@ Workflow คลิกที่ Node Google Gemini
 โครงสร้างไฟล์ของโปรเจกต์เป็นแบบ Monorepo:
 
 ```text
-worddee-project/
+WebWord/
 ├── 📂 backend/            # FastAPI Application
 │   ├── main.py            # API Logic & Endpoints
 │   ├── requirements.txt   # Python Dependencies
@@ -92,7 +92,11 @@ worddee-project/
 │   ├── app/               # App Router Pages
 │   ├── public/            # Static Assets
 │   ├── package.json       # JS Dependencies
-│   └── Dockerfile         # Frontend Container Setup
+│   └── Dockerfile
+│
+├── 📂 images/
+│   ├──challenge.png       # Images Challenge Page
+│   └──dashboard.png       # Images Dashboard Page
 │
 ├── .env                   # Environment Variables
 ├── .gitignore             # Git Ignore Rules
