@@ -8,7 +8,7 @@
 
 | Word of the Day Challenge | Learner Dashboard |
 |:---:|:---:|
-| ![Word Challenge](https://via.placeholder.com/400x300?text=Challenge+Mode) | ![Dashboard](https://via.placeholder.com/400x300?text=Dashboard+Progress) |
+| ![Word Challenge](images/challenge.png)  | ![Dashboard](images/dashboard.png) |
 | *หน้าสุ่มคำศัพท์และแต่งประโยค* | *หน้าสรุปผลการเรียนและกราฟพัฒนาการ* |
 
 ---
