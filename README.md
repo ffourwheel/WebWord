@@ -1,6 +1,6 @@
-# API Integration - n8n & ChatGPT
+# API Integration - n8n & Gemini
 
-ระบบเชื่อมต่อ n8n API และ ChatGPT API ที่เสถียรและรวดเร็ว
+ระบบเชื่อมต่อ n8n API และ Gemini API ที่เสถียรและรวดเร็ว
 
 ## Features
 
@@ -27,13 +27,13 @@ cp .env.example .env
 ```env
 N8N_URL=https://your-n8n-instance.com
 N8N_API_KEY=your-n8n-api-key
-OPENAI_API_KEY=your-openai-api-key
+GEMINI_API_KEY=your-gemini-api-key
 ```
 
 ## Usage
 
 ```python
-from api_integration import N8NClient, ChatGPTClient
+from api_integration import N8NClient, GeminiClient
 import os
 
 # Initialize clients
@@ -44,14 +44,14 @@ n8n = N8NClient(
     max_retries=3
 )
 
-chatgpt = ChatGPTClient(
-    os.getenv('OPENAI_API_KEY'),
+gemini = GeminiClient(
+    os.getenv('GEMINI_API_KEY'),
     timeout=30,
     max_retries=3
 )
 
-# Use ChatGPT
-response = chatgpt.chat("Hello!")
+# Use Gemini
+response = gemini.chat("Hello!")
 print(response)
 
 # Trigger n8n workflow
@@ -65,14 +65,14 @@ print(executions)
 
 ## API Reference
 
-### ChatGPTClient
+### GeminiClient
 
 ```python
-ChatGPTClient(api_key, timeout=30, max_retries=3)
+GeminiClient(api_key, timeout=30, max_retries=3)
 ```
 
 **Methods:**
-- `chat(message, model="gpt-4o-mini", temperature=0.7)` - ส่งข้อความและรับคำตอบ
+- `chat(message, temperature=0.7)` - ส่งข้อความและรับคำตอบ
 
 ### N8NClient
 
