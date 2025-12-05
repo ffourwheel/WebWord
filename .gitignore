@@ -1,0 +1,17 @@
+# --- Frontend (Node.js/Next.js) ---
+node_modules/
+.next/
+dist/
+build/
+.env
+.env.local
+.DS_Store
+
+# --- Backend (Python/FastAPI) ---
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+.pytest_cache/

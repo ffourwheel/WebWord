@@ -1,0 +1,241 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are an English vocabulary generator API.\nTask: Randomly select one interesting, useful English word (CEFR Level A2, B1, B2, or C1).\n\nYour response MUST be a raw JSON object only.\nDO NOT use markdown formatting (no ```json ... ```).\nDO NOT include any introductory text.\n\nRequired JSON Structure:\n{\n  \"word\": \"The word itself\",\n  \"pronunciation\": \"Easy phonetic spelling (e.g., 'ri-zil-yuhns')\",\n  \"type\": \"Part of speech (e.g., Noun, Verb, Adjective)\",\n  \"meaning\": \"A clear, simple definition in English\",\n  \"example\": \"One example sentence using the word\",\n  \"image\": \"ONE single visual keyword for searching images (e.g., 'mountain', 'negotiation', 'office')\",\n  \"level\": \"MUST be exactly one of these three strings: 'Beginner', 'Intermediate', or 'Advanced'\"\n}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "cb4f1a8a-d7a2-4ad7-b9c7-6ee79aef1848",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "BX9sttFIwx1wQW60",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Act as a strict English teacher API.\n\nInput Data:\n- Target Word: {{ $json.body.word }}\n- Student Sentence: {{ $json.body.sentence }}\n\nTask: Grade the student's sentence based on grammar, usage of the target word, and meaningfulness.\n\nYour response MUST be a raw JSON object only.\nDO NOT use markdown formatting.\n\nRequired JSON Structure:\n{\n  \"score\": 0 to 10 (number, e.g. 7.5),\n  \"level\": \"Beginner\" or \"Intermediate\" or \"Advanced\",\n  \"suggestion\": \"Specific feedback on grammar or usage\",\n  \"corrected_sentence\": \"A better, native-like version of the sentence\"\n}\n\nIf the input is nonsense, give score 0."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        208,
+        240
+      ],
+      "id": "ba760103-f05d-4763-aadf-49b221137a83",
+      "name": "Message a model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "BX9sttFIwx1wQW60",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        768,
+        0
+      ],
+      "id": "2806c0b2-b06d-4e72-8bf0-dc5dc6f5c6fb",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        768,
+        240
+      ],
+      "id": "1935ef38-2a76-4570-bf6f-bc3233e5078e",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generate-word",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "67bb5a54-2ffa-4ce3-baec-e7bf3663269f",
+      "name": "Generate Word",
+      "webhookId": "9d2a3831-1dbb-4537-ac48-bdd42ad95d01"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "validate-sentence",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        16,
+        240
+      ],
+      "id": "33fdf0a9-2107-460c-a791-00d9ea3535dd",
+      "name": "Validate Sentence",
+      "webhookId": "d3f89425-f678-4e8a-8951-a77b6452734a"
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $input.first().json.content;\nconst aiText = content?.parts?.[0]?.text || $input.first().json.text || \"\";\nconst textString = typeof aiText === 'string' ? aiText : JSON.stringify(aiText);\nlet cleanText = textString.replace(/```json/g, \"\").replace(/```/g, \"\").trim();\n\nif (!cleanText) {\n  return [ { json: { error: \"AI returned empty\", word: \"Error\", sentence: \"Try again\" } } ];\n}\n\ntry {\n  const jsonData = JSON.parse(cleanText);\n  return [ { json: jsonData } ];\n} catch (e) {\n  return [ { json: { error: \"JSON Parse Error\", raw: cleanText } } ];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        0
+      ],
+      "id": "ea1a981c-94c5-4b3e-9380-d69240d3bef0",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $input.first().json.content;\nconst aiText = content?.parts?.[0]?.text || $input.first().json.text || \"\";\nconst textString = typeof aiText === 'string' ? aiText : JSON.stringify(aiText);\n\nlet cleanText = textString.replace(/```json/g, \"\").replace(/```/g, \"\").trim();\n\nconst fallback = {\n  score: 0,\n  level: \"Unknown\",\n  suggestion: \"AI could not process result. Please try again.\",\n  corrected_sentence: \"-\"\n};\n\ntry {\n  if (!cleanText) return [ { json: fallback } ];\n  const jsonData = JSON.parse(cleanText);\n  return [ { json: jsonData } ];\n} catch (e) {\n  return [ { json: fallback } ];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        240
+      ],
+      "id": "e34b9ab0-f282-4f49-8307-c2165f776f01",
+      "name": "Code in JavaScript1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Word": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Sentence": {
+      "main": [
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "e16ac097-fcfd-432c-b3d8-b2aa3fa5ee3e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fa2b88c6336da3b1ffae18632bb115100c836d1d0d38c7a3b8616551d0ccf649"
+  },
+  "id": "VJrTx6CYv100t8ZP",
+  "tags": []
+}
