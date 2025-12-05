@@ -95,8 +95,8 @@ WebWord/
 │   └── Dockerfile
 │
 ├── 📂 images/
-│   ├──challenge.png       # Images Challenge Page
-│   └──dashboard.png       # Images Dashboard Page
+│   ├── challenge.png       # Images Challenge Page
+│   └── dashboard.png       # Images Dashboard Page
 │
 ├── .env                   # Environment Variables
 ├── .gitignore             # Git Ignore Rules
