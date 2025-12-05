@@ -18,7 +18,6 @@ export default function WorddeePage() {
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [streak, setStreak] = useState(0);
   const [totalMinutes, setTotalMinutes] = useState(0);
-
   const SKIP_LIMIT = 3; 
   const COOLDOWN_DURATION = 30;
   const [skipCount, setSkipCount] = useState(0);
