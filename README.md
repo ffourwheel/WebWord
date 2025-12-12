@@ -29,10 +29,10 @@ git clone [https://github.com/ffourwheel/WebWord](https://github.com/ffourwheel/
 cd WebWord
 
 # สร้างไฟล์ชื่อ .env แล้ววางเนื้อหานี้ลงไป
-GEMINI_API_KEY=AIzaSyD_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=112233
-POSTGRES_DB=webwords_db
+GEMINI_API_KEY=your_gemini_api_key_here
+MYSQL_USER=root_admin
+MYSQL_PASSWORD=your_password
+MYSQL_DB=webwords_db
 
 docker-compose up --build
 

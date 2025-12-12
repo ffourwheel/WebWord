@@ -1,18 +1,17 @@
 services:
-  postgres_db:
-    image: postgres:15-alpine
-    container_name: postgres_db
+  mysql_db:
+    image: mysql:8.0
+    container_name: mysql_db
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: "112233"
-      POSTGRES_DB: webwords_db
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: webwords_db
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - mysql_data:/var/lib/mysql
     ports:
-      - "5432"
+      - "3306:3306"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d webwords_db"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -24,14 +23,14 @@ services:
       - ./backend:/app
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
-      - DB_HOST=postgres_db
+      - DB_HOST=mysql_db
       - DB_NAME=webwords_db
-      - DB_USER=postgres
-      - DB_PASS=112233
-      - DB_PORT=5432
+      - DB_USER=root
+      - DB_PASS=root
+      - DB_PORT=3306
       - N8N_URL=http://n8n:5678/webhook
     depends_on:
-      postgres_db:
+      mysql_db:
         condition: service_healthy
     restart: always
     
@@ -60,9 +59,9 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
     depends_on:
-      postgres_db:
+      mysql_db:
         condition: service_healthy
 
 volumes:
-  postgres_data:
+  mysql_data:
   n8n_data:

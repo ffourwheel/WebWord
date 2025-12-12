@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { User, Loader2, Play, Flame, Timer, ChevronDown } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { User, Loader2, Flame, Timer, ChevronDown } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface WordData { word: string; pronunciation: string; type: string; meaning: string; example: string; image: string; level: string;}
 interface ResultData { score: number; level: string; suggestion: string; corrected_sentence: string;}
@@ -74,7 +74,10 @@ export default function WorddeePage() {
       }
   };
 
-  useEffect(() => { fetchNewWord(); }, []);
+  useEffect(() => { 
+    fetchNewWord(); 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = async () => {
       if (cooldown > 0 || isLoading) return;
@@ -123,7 +126,7 @@ export default function WorddeePage() {
 
                 <div className="border border-gray-200 rounded-2xl p-4 flex flex-col md:flex-row gap-6 relative mb-8">
                     <div className="w-full md:w-48 h-48 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100">
-                        <img src={wordData.image} alt={wordData.word} className="w-full h-full object-cover" referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/400x400?text=No+Image"; }}/>
+                        <img src={wordData.image} alt={wordData.word} className="w-full h-full object-cover" referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1540573133985-87b6da6d54a9?w=400&h=400&fit=crop"; }}/>
                     </div>
                     <div className="flex-1 py-1">
                         <div className="flex justify-between items-start">

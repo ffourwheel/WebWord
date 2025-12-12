@@ -9,7 +9,7 @@ from tenacity import retry, stop_after_attempt, wait_fixed, retry_if_exception_t
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Text
 from sqlalchemy.orm import sessionmaker, Session, declarative_base
 from contextlib import asynccontextmanager
 from typing import List, Optional
@@ -21,14 +21,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger("worddee-backend")
 
-DB_HOST = os.getenv("DB_HOST", "postgres_db")
+DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_NAME = os.getenv("DB_NAME", "webwords_db")
-DB_USER = os.getenv("DB_USER", "postgres")
-DB_PASS = os.getenv("DB_PASS", "112233")
-DB_PORT = os.getenv("DB_PORT", "5432")
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASS = os.getenv("DB_PASS", "root")
+DB_PORT = os.getenv("DB_PORT", "3306")
 
 N8N_BASE_URL = os.getenv("N8N_URL", "http://n8n:5678/webhook")
-DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -37,12 +37,12 @@ Base = declarative_base()
 class History(Base):
     __tablename__ = "history"
     id = Column(Integer, primary_key=True, index=True)
-    word = Column(String)
-    sentence = Column(String)
+    word = Column(String(255))
+    sentence = Column(Text)
     score = Column(Float)
-    level = Column(String)
-    suggestion = Column(String)
-    corrected_sentence = Column(String)
+    level = Column(String(50))
+    suggestion = Column(Text)
+    corrected_sentence = Column(Text)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     
 class SummaryResponse(BaseModel):
@@ -68,10 +68,10 @@ async def lifespan(app: FastAPI):
     for i in range(10):
         try:
             Base.metadata.create_all(bind=engine)
-            logger.info("PostgreSQL connected and tables created!")
+            logger.info("MySQL connected and tables created!")
             break
         except Exception as e:
-            logger.warning(f"PostgreSQL not ready Waiting ({i+1}/10). Error: {e}")
+            logger.warning(f"MySQL not ready Waiting ({i+1}/10). Error: {e}")
             time.sleep(2)
     
     yield
