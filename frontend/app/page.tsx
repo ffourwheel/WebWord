@@ -123,7 +123,7 @@ export default function WorddeePage() {
 
                 <div className="border border-gray-200 rounded-2xl p-4 flex flex-col md:flex-row gap-6 relative mb-8">
                     <div className="w-full md:w-48 h-48 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100">
-                        <img src={wordData.image} alt={wordData.word} className="w-full h-full object-cover" referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/400x400?text=No+Image"; }}/>
+                        <img src={wordData.image} alt={wordData.word} className="w-full h-full object-cover" referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.src = "https://i.postimg.cc/9MD9mRxY/02.jpg"; }}/>
                     </div>
                     <div className="flex-1 py-1">
                         <div className="flex justify-between items-start">

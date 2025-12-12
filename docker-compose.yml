@@ -24,7 +24,7 @@ services:
       - ./backend:/app
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
-      - DB_HOST=postgres_db
+      - DB_HOST=localhosts
       - DB_NAME=webwords_db
       - DB_USER=postgres
       - DB_PASS=112233
